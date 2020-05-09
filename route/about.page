@@ -1,6 +1,6 @@
 ---
 title: Route
-description: Custom route tool.
+description: Custom route files.
 author: Taufik Nurrohman
 type: Markdown
 version: 1.0.0
@@ -17,14 +17,14 @@ Add some PHP files in `.\lot\route` folder:
         └── contact.php
 ~~~
 
-Those route files will automatically take effect on the existing site with an address according to the location of the route file, excluding the `.php` extension. For example, in the file structure above, two routes will be applied:
+Route files will automatically take effect on the existing site with an address according to the location of the route file, excluding the `.php` extension. For example, based on the file structure above, two routes will be applied:
 
 ~~~ .txt
 http://127.0.0.1/route/contact
 http://127.0.0.1/route/user/register
 ~~~
 
-Two global variables called `$id` and `$path` are available for use within the route file. `$id` refers to the value after the `http://127.0.0.1/route/` path, and `$path` refers to the route’s file path.
+Two global variables with name `$id` and `$path` are available to be used within the route file. `$id` refers to the value after the `http://127.0.0.1/route/` path, and `$path` refers to the route’s file path.
 
 The following is an example contents of a route file:
 
@@ -63,7 +63,7 @@ if (send($from, $to, $title, $content)) {
 Guard::kick('contact');
 ~~~
 
-And therefore you will be able to use that route as the form action in the HTML form element like this:
+Therefore you will be able to use that route as the form action in the HTML form element like so:
 
 ~~~ .html
 <form action="<?= $url; ?>/route/contact" method="post">
