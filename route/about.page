@@ -29,6 +29,8 @@ Two global variables with name `$id` and `$path` are available to be used within
 The following is an example contents of a route file:
 
 ~~~ .php
+<?php
+
 $errors = 0;
 
 // Validate request method
