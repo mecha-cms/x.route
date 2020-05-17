@@ -3,7 +3,7 @@ title: Route
 description: Custom route files.
 author: Taufik Nurrohman
 type: Markdown
-version: 1.0.0
+version: 1.0.1
 ...
 
 Add some PHP files in `.\lot\route` folder:
