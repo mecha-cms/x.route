@@ -1,5 +1,5 @@
-Route Extension for Mecha
-=========================
+Route Extension for [Mecha](https://github.com/mecha-cms/mecha)
+===============================================================
 
 Release Notes
 -------------
