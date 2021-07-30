@@ -6,7 +6,7 @@ Release Notes
 
 ### 1.0.2
 
- - [@mecha-cms/mecha#69](https://github.com/mecha-cms/mecha/issues/69)
+ - [@mecha-cms/mecha#96](https://github.com/mecha-cms/mecha/issues/96)
 
 ### 1.0.1
 
