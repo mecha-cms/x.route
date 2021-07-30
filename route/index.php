@@ -1,4 +1,4 @@
-<?php namespace _\lot\x;
+<?php namespace x;
 
 $r = \trim(\State::get('x.route.path') ?? 'route', '/');
 
