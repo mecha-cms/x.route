@@ -1,7 +1,5 @@
 <?php namespace x;
 
-$r = \trim(\State::get('x.route.path') ?? 'route', '/');
-
 function route($id) {
     if (\is_file($path = \LOT . \DS . 'route' . \DS . \strtr($id, '/', \DS) . '.php')) {
         extract($GLOBALS, \EXTR_SKIP);
@@ -9,4 +7,4 @@ function route($id) {
     }
 }
 
-\Route::set($r . '/*', __NAMESPACE__ . "\\route", 0);
+\Route::set(\trim($state->x->route->path ?? '/route', '/') . '/*', __NAMESPACE__ . "\\route", 0);
