@@ -47,7 +47,7 @@ if (!Guard::check(Post::get('token'), 'contact')) {
 
 // Redirect to the contact page immediately if there are some errors
 if ($errors > 0) {
-    Guard::kick('contact');
+    Guard::kick('/contact');
 }
 
 // Process the request data…
@@ -62,7 +62,7 @@ if (send($from, $to, $title, $content)) {
 }
 
 // Redirect to the contact page by default
-Guard::kick('contact');
+Guard::kick('/contact');
 ~~~
 
 Therefore you will be able to use that route as the form action in the HTML form element like so:
@@ -70,10 +70,20 @@ Therefore you will be able to use that route as the form action in the HTML form
 ~~~ .html
 <form action="<?= $url; ?>/route/contact" method="post">
   <?= $alert; ?>
-  <p><input name="title" required type="text"></p>
-  <p><input name="email" required type="email"></p>
-  <p><textarea name="content" required></textarea></p>
-  <p><button type="submit"><?= i('Send'); ?></button></p>
+  <p>
+    <input name="title" required type="text">
+  </p>
+  <p>
+    <input name="email" required type="email">
+  </p>
+  <p>
+    <textarea name="content" required></textarea>
+  </p>
+  <p>
+    <button type="submit">
+      <?= i('Send'); ?>
+    </button>
+  </p>
   <input name="token" type="hidden" value="<?= token('contact'); ?>">
 </form>
 ~~~
