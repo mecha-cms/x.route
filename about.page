@@ -1,89 +1,82 @@
 ---
 title: Route
 description: Custom route files.
+icon: 'M9.64,13.4C8.63,12.5 7.34,12.03 6,12V15L2,11L6,7V10C7.67,10 9.3,10.57 10.63,11.59C10.22,12.15 9.89,12.76 9.64,13.4M18,15V12C17.5,12 13.5,12.16 13.05,16.2C14.61,16.75 15.43,18.47 14.88,20.03C14.33,21.59 12.61,22.41 11.05,21.86C9.5,21.3 8.67,19.59 9.22,18.03C9.5,17.17 10.2,16.5 11.05,16.2C11.34,12.61 14.4,9.88 18,10V7L22,11L18,15M13,19A1,1 0 0,0 12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19M11,11.12C11.58,10.46 12.25,9.89 13,9.43V5H16L12,1L8,5H11V11.12Z'
 author: Taufik Nurrohman
 type: Markdown
-version: 1.0.2
+version: 2.0.0
+
+use:
+  '.\lot\x\layout': 1
 ...
 
-Add some PHP files in `.\lot\route` folder:
+Add some PHP files to the `.\lot\route` folder. Each file in this folder serves as an executable function for the
+routes:
 
 ~~~ .txt
 .\
 └── lot\
     └── route\
         ├── user\
-        │   └── register.php
-        └── contact.php
+        │   └── create.php
+        ├── contact.php
+        └── user.php
 ~~~
 
-Route files will automatically take effect on the existing site with an address according to the location of the route file, excluding the `.php` extension. For example, based on the file structure above, two routes will be applied:
-
-~~~ .txt
-http://127.0.0.1/route/contact
-http://127.0.0.1/route/user/register
-~~~
-
-Two global variables with name `$id` and `$path` are available to be used within the route file. `$id` refers to the value after the `http://127.0.0.1/route/` path, and `$path` refers to the route’s file path.
-
-The following is an example contents of a route file:
+A route file contains a function to be executed by the `route` hook. It provides several arguments that you can use in
+the function. You can also return a value to be received by the next hook (if any) at the end of the function.
 
 ~~~ .php
 <?php
 
-$errors = 0;
-
-// Validate request method
-if (!Request::is('Post')) {
-    Alert::error('Method not allowed.');
-    ++$errors;
-}
-
-// Validate form token
-if (!Guard::check(Post::get('token'), 'contact')) {
-    Alert::error('Invalid token.');
-    ++$errors;
-}
-
-// Redirect to the contact page immediately if there are some errors
-if ($errors > 0) {
-    Guard::kick('/contact');
-}
-
-// Process the request data…
-$from = 'hello@example.com';
-$to = Post::get('email');
-$title = Post::get('title');
-$content = Post::get('content');
-if (send($from, $to, $title, $content)) {
-    Alert::success('Mail was sent successfully.');
-} else {
-    Alert::error('An error occurred while sending the mail.');
-}
-
-// Redirect to the contact page by default
-Guard::kick('/contact');
+return function ($content, $path, $query, $hash) {
+    // Do something here…
+};
 ~~~
 
-Therefore you will be able to use that route as the form action in the HTML form element like so:
+The function will be executed when the current URL path points to an existing route file without the `.php` extension.
+Based on the file structure above, you should have this list of active routes which can be visited publicly:
 
-~~~ .html
-<form action="<?= $url; ?>/route/contact" method="post">
-  <?= $alert; ?>
-  <p>
-    <input name="title" required type="text">
-  </p>
-  <p>
-    <input name="email" required type="email">
-  </p>
-  <p>
-    <textarea name="content" required></textarea>
-  </p>
-  <p>
-    <button type="submit">
-      <?= i('Send'); ?>
-    </button>
-  </p>
-  <input name="token" type="hidden" value="<?= token('contact'); ?>">
-</form>
+~~~ .txt
+http://127.0.0.1/route/contact
+http://127.0.0.1/route/user
+http://127.0.0.1/route/user/create
+~~~
+
+Routes that are more specific will be executed after routes that are more general (their parent routes). It means that
+route file `.\lot\route\user.php` will be executed before route file `.\lot\route\user\create.php` when you visit
+`http://127.0.0.1/user/create`. The value returned by the route function from file `.\lot\route\user.php` will be passed
+to the first function argument of the route function in file `.\lot\route\user\create.php`.
+
+~~~ .php
+// From `.\lot\route\user.php`
+return function ($content, $path, $query, $hash) {
+    // The value of variable `$path` will be `'/user'` when you visit `http://127.0.0.1/user`
+    // The value of variable `$path` will be `'/user/create'` when you visit `http://127.0.0.1/user/create`
+    // You actually don’t have to create file `.\lot\route\user\create.php`. You can have your own way to process the path after `'/user'`
+    if ('/user/create' === $path) {
+        // Do something here…
+    } else if (0 === strpos($path, '/user/delete/')) {
+        $name = basename($path);
+        // Do something with `$name` here…
+    } else if (0 === strpos($path, '/user/read/')) {
+        $name = basename($path);
+        // Do something with `$name` here…
+    } else if (0 === strpos($path, '/user/update/')) {
+        $name = basename($path);
+        // Do something with `$name` here…
+    } else {
+        // Do something else here…
+    }
+    // This value will be passed to the child routes
+    return 123;
+};
+~~~
+
+~~~ .php
+// From `.\lot\route\user\create.php`
+return function ($content, $path, $query, $hash) {
+    // The value of variable `$content` will be `123`
+    // The value of variable `$path` will be `'/user/create'`
+}
 ~~~
