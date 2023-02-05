@@ -38,9 +38,9 @@ The function will be executed when the current URL path points to an existing ro
 Based on the file structure above, you should have this list of active routes which can be visited publicly:
 
 ~~~ .txt
-http://127.0.0.1/route/contact
-http://127.0.0.1/route/user
-http://127.0.0.1/route/user/create
+http://127.0.0.1/contact
+http://127.0.0.1/user
+http://127.0.0.1/user/create
 ~~~
 
 Routes that are more specific will be executed after routes that are more general (their parent routes). It means that
@@ -79,4 +79,35 @@ return function ($content, $path, $query, $hash) {
     // The value of variable `$content` will be `123`
     // The value of variable `$path` will be `'/user/create'`
 }
+~~~
+
+Below is a route definition example to read a specific page file stored in a custom folder which you can see the result
+by visiting `http://127.0.0.1/a-static-page`:
+
+~~~ .php
+// From `.\lot\route\a-static-page.php`
+// We can omit the arguments here because they are not needed in the function body
+return function () {
+    // Set some page conditionals which will also effect the `<html>` classes
+    State::set([
+        'has' => [
+            'next' => false,
+            'page' => true,
+            'pages' => false,
+            'part' => false,
+            'prev' => false
+        ],
+        'is' => [
+            'error' => false,
+            'page' => true,
+            'pages' => false
+        ]
+    ]);
+    // Store current page to variable `$page` globally so that it can be shared to the layout
+    $GLOBALS['page'] = $page = new Page('.\path\to\a-static-page.page');
+    // Append page title to the current window title
+    $GLOBALS['t'][] = $page->title;
+    // Return a response for layout, so it will load `.\lot\y\*\page.php` file in the end
+    return ['page', [], 200];
+};
 ~~~
