@@ -6,9 +6,6 @@ color: '#4a8221'
 author: Taufik Nurrohman
 type: Markdown
 version: 2.0.0
-
-use:
-  '.\lot\x\layout': 1
 ...
 
 Add some PHP files to the `.\lot\route` folder. Each file in this folder serves as an executable function for the
