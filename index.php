@@ -11,6 +11,6 @@ function route($content, $path, $query, $hash) {
     return $content;
 }
 
-// This hook will be executed immediately, but it may be overridden by other route hooks afterwards.
-// The best way to maintain its priority is to create unique route names that are never used before.
+// This hook will be executed immediately, but the result may be overridden by later route hooks. The best way to
+// avoid this is to create route names that have never been used before.
 \Hook::set('route', __NAMESPACE__ . "\\route", 0);
