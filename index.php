@@ -1,4 +1,4 @@
-<?php namespace x;
+<?php namespace x\route;
 
 function route($content, $path, $query, $hash) {
     foreach (\array_reverse(\array_values(\step(\trim(\strtr($path ?? "", ['/' => \D]), \D), \D))) as $v) {
