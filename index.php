@@ -4,6 +4,7 @@ function route($content, $path, $query, $hash) {
     foreach (\array_reverse(\array_values(\step(\trim(\strtr($path ?? "", ['/' => \D]), \D), \D))) as $v) {
         if (\is_file($file = \LOT . \D . 'route' . \D . $v . '.php')) {
             if (\is_callable($fn = require $file)) {
+                \status(200);
                 $content = \fire($fn, [$content, '/' . \strtr($v, [\D => '/']), $query, $hash]);
             }
         }
