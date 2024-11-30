@@ -102,9 +102,9 @@ return function () {
         ]
     ]);
     // Store current page to variable `$page` globally so that it can be shared to the layout
-    $GLOBALS['page'] = $page = new Page('.\path\to\a-static-page.page');
+    lot('page', $page = new Page('.\path\to\a-static-page.page'));
     // Append page title to the current window title
-    $GLOBALS['t'][] = $page->title;
+    lot('t')[] = $page->title;
     // Return a response for layout, so it will load `.\lot\y\*\page.php` file in the end
     return ['page', [], 200];
 };
